@@ -79,6 +79,7 @@ public class SimpleBot extends TelegramLongPollingBot {
             }*/
             try {
                 if (!message.getText().isEmpty()) {
+                    System.out.println(String.format("ChatId: %s, Message: %s",message.getChatId(), messageout));
                //     CacheManager.getInstance().put(message.getChatId(), messageout);
                     execute(message);
                 }
