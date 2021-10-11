@@ -4,6 +4,9 @@ import TelegaBotPac.core.model.Destination;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,26 +14,26 @@ import java.util.List;
 
 public class DoParsingMain {
     /**
-     * @param uc - Document - DOM SITE
      * @return HashMap<Integer, ArrayList < String>>
      */
-    public static List<Destination> getDestination(Document uc) {
+    public static List<Destination> getDestination(WebDriver webDriver) {
         List<Destination> destinations = new ArrayList<>();
-        Elements links = uc.select("div");
-        for (Element obj : links) {
-            String name = obj.attr("class");
-            if ("footer-regions".equals(name)) {
-                Elements objLi = obj.select("a");
-                for (Element objLis : objLi) {
-                    if(!objLis.attr("href").isEmpty()) {
-                        destinations.add(new Destination.Builder()
-                                .setNameDestination(objLis.text())
-                                .setLink(objLis.attr("href"))
-                                .build());
-                    }
-                }
-            }
-        }
+        webDriver.findElements(
+                new By.ByXPath("//*[@id=\"__layout\"]/div/section/div/div[1]/div[2]/div[3]/div[1]/div"))
+                .stream()
+                .findFirst()
+                .ifPresent(element ->
+                    element.findElements(new By.ByCssSelector("a")).forEach(el -> {
+                        if (!el.getAttribute("href").isEmpty()) {
+                            destinations.add(new Destination.Builder()
+                                    .setNameDestination(el.getAttribute("innerHTML").trim()
+                                            .replaceAll("^[\n\r]", "").replaceAll("[\n\r]$", ""))
+                                    .setLink(el.getAttribute("href"))
+                                    .build());
+                            System.out.println(el.getAttribute("innerHTML"));
+                        }
+                    })
+                );
         return destinations;
     }
 }

@@ -1,6 +1,5 @@
 package TelegaBotPac;
 
-import TelegaBotPac.Parser.ParsePIK;
 import TelegaBotPac.core.cache.CacheManager;
 import TelegaBotPac.core.model.Route;
 import lombok.SneakyThrows;
@@ -8,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -32,13 +30,13 @@ public class SimpleBot extends TelegramLongPollingBot {
                 if (CacheManager.isInit()) {
                     CacheManager.getInstance().clear();
                 }
-                CacheManager.init();
+                new Thread(CacheManager::init).start();
             }
 
             if (CacheManager.isInit()) {
                 if(CacheManager.getInstance().contains(message.getChatId())){
-                    System.out.println(String.format("%s %s",
-                            message.getChatId(), CacheManager.getInstance().get(message.getChatId())));
+                    System.out.printf("%s %s%n",
+                            message.getChatId(), CacheManager.getInstance().get(message.getChatId()));
                 }
 
                 int i = 1;
@@ -46,41 +44,36 @@ public class SimpleBot extends TelegramLongPollingBot {
                     StringBuilder strb = new StringBuilder();
                     List<Route> routes = (List<Route>) CacheManager.getInstance().get(messageout);
                     for (Route route : routes) {
-                        strb.append(i++).append(". ")
-                                .append(String.format("<a href='%s'>", ParsePIK.HOME_URL+route.getLink()))
-                                .append(route.getTitle())
-                                .append("</a>")
-                                .append("\n")
-                                .append(route.getDescription() == null ? "" : (route.getDescription() + "\n"))
-                                .append(String.format(" Стоимость: %s ", route.getCost() == null ?
-                                        route.getAroundCost() == null ? "" : route.getAroundCost() : route.getCost()))
-                                .append(route.getCurrency() == null ? "" : route.getCurrency())
-                                .append("\n");
-                        ;
+                        strb.append(route.getDescriptionForMessage(i++));
+                        if(strb.length()>3500){
+                            message.setText(strb.toString());
+                            execute(message);
+                            strb = new StringBuilder();
+                        }
                     }
                     message.setText(strb.toString());
                     menu = false;
                 } else {
                     StringBuilder strb = new StringBuilder();
+
                     for (String title : CacheManager.getKeys()) {
-                        strb.append(i++).append(". ").append(title).append("\n");
+                        if(!((List)CacheManager.getInstance().get(title)).isEmpty()) {
+                            strb.append(i++).append(". ").append(title).append("\n");
+                        }
                     }
                     message.setText(strb.toString());
                     menu = false;
                 }
-
-
-            } else {
-                CacheManager.init();
+            }else{
+                message.setText("Data initialization");
             }
 
 /*            if (menu) {
                 message.setText(Menu.getMenu());
             }*/
             try {
+                System.out.printf("ChatId: %s, Message: %s%n",message.getChatId(), messageout);
                 if (!message.getText().isEmpty()) {
-                    System.out.println(String.format("ChatId: %s, Message: %s",message.getChatId(), messageout));
-               //     CacheManager.getInstance().put(message.getChatId(), messageout);
                     execute(message);
                 }
             } catch (TelegramApiException e) {

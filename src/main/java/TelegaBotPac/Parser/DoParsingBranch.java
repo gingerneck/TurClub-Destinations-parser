@@ -1,58 +1,51 @@
 package TelegaBotPac.Parser;
 
 import TelegaBotPac.core.model.Route;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DoParsingBranch {
+
     /**
-     * @param uc - Document - DOM SITE
-     * @return HashMap<Integer, ArrayList < String>>
+     * @param webDriver
+     * @return
      */
-    public static List<Route> getParsed(Document uc) {
+    public static List<Route> getParsed(WebDriver webDriver) throws InterruptedException {
 
         List<Route> routes = new ArrayList<>();
-        Integer i = 0;
-
-        Elements links = uc.select("div");
-
-        for (Element obj : links) {
-            String name = obj.attr("class");
-            if ("trip-card".equals(name)) {
-                Route.Builder routeBuilder = new Route.Builder();
-                Elements itemprop = obj.getElementsByAttribute("itemprop");
-                itemprop.forEach(item ->{
-                    if(item.text()!=null){
-
-                        if(item.select("span[itemprop=price]").hasAttr("content")){
-                            routeBuilder.setCost(item.select("span[itemprop=price]").attr("content"));
-                        }
-                        if(item.select("span[itemprop=priceCurrency]").hasAttr("content")){
-                            routeBuilder.setCurrency(item.select("span[itemprop=priceCurrency]").attr("content"));
-                        }
-                        if(item.select("a[itemprop=url]").hasAttr("href")){
-                            routeBuilder.setLink(item.select("a[itemprop=url]").attr("href"));
-                        }
-                        if(item.select("p[class=trip-card-title]").hasText()){
-                            routeBuilder.setTitle(item.select("p[class=trip-card-title]").text());
-                        }
-                    }
-                });
-                if(obj.select("p[class=trip-card-description]").hasText()){
-                    routeBuilder.setDescription(obj.select("p[class=trip-card-description]").text());
-                }
-                if(obj.select("div[class=trip-card-price]").hasText()){
-                    routeBuilder.setAroundCost(obj.select("div[class=trip-card-price]").text());
-                }
-                routes.add(routeBuilder.build());
+        Thread.sleep(3000);
+        try {
+            while (true) {
+                webDriver.findElement(new By.ByXPath("//*[@id=\"__layout\"]/div/div[2]/section/div/button")).click();
+                Thread.sleep(6000);
             }
+        } catch (NoSuchElementException | ElementClickInterceptedException ex) {
+            System.out.println(ex.getMessage());
         }
+        webDriver.findElements(new By.ByXPath("//*[@id=\"__layout\"]/div/div[2]/section/div/div[2]/div/div"))
 
+                .forEach(obj -> {
+                    Route.Builder routeBuilder = new Route.Builder();
+                    routeBuilder.setCurrency(
+                            obj.findElement(new By.ByCssSelector("span[itemprop=priceCurrency]")).getAttribute("content"));
+                    routeBuilder.setLink(
+                            obj.findElement(new By.ByCssSelector("a[itemprop=url]")).getAttribute("href"));
+                    routeBuilder.setCost(
+                            obj.findElement(new By.ByCssSelector("span[itemprop=price]")).getAttribute("content"));
+                    routeBuilder.setTitle(
+                            obj.findElement(new By.ByCssSelector("p[class=trip-card-title]")).getText());
+                    routeBuilder.setDescription(
+                            obj.findElement(new By.ByCssSelector("p[class=trip-card-description]")).getText());
+                    routeBuilder.setAroundCost(
+                            obj.findElement(new By.ByCssSelector("div[class=trip-card-price]")).getText());
+                    routes.add(routeBuilder.build());
+                    System.out.println(routeBuilder.build());
+                });
         return routes;
     }
 }

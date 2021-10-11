@@ -4,9 +4,11 @@ import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @AutoConfigurationPackage
+@EnableScheduling
 public class BotStarter extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

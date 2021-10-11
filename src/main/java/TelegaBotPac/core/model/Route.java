@@ -15,6 +15,33 @@ public class Route {
     private final String nameTrip;
     private final String title;
     private final String aroundCost;
+
+    @Override
+    public String toString() {
+        return "Route{" +
+                "cost='" + cost + '\'' +
+                ", currency='" + currency + '\'' +
+                ", link='" + link + '\'' +
+                ", nameTrip='" + nameTrip + '\'' +
+                ", title='" + title + '\'' +
+                ", aroundCost='" + aroundCost + '\'' +
+                ", Description='" + Description + '\'' +
+                '}';
+    }
+
+    public String getDescriptionForMessage(int i){
+        return new StringBuilder().append(i).append(". ")
+                .append(String.format("<a href='%s'>", this.getLink()))
+                .append(this.getTitle())
+                .append("</a>")
+                .append("\n")
+                .append(this.getDescription() == null ? "" : (this.getDescription() + "\n"))
+                .append(String.format(" Стоимость: %s ", this.getCost() == null ?
+                        this.getAroundCost() == null ? "" : this.getAroundCost() : this.getCost()))
+                .append(this.getCurrency() == null ? "" : this.getCurrency())
+                .append("\n").toString();
+    }
+
     private final String Description;
 
     public static class Builder {

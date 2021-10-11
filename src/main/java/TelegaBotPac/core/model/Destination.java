@@ -15,6 +15,15 @@ public class Destination {
     private final String link;
     private final List<Route> routes;
 
+    @Override
+    public String toString() {
+        return "Destination{" +
+                "nameDestination='" + nameDestination + '\'' +
+                ", link='" + link + '\'' +
+                ", routes=" + routes +
+                '}';
+    }
+
     public static class Builder {
 
         private String nameDestination;
