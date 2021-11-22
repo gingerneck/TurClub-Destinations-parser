@@ -5,15 +5,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.io.File;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class DriverServiceChrome {
+    public static final String OPC_DRIVER = "/home/opc/chromedriver";
+    public static final String MAC_DRIVER = "chromedriver";
 
     @SneakyThrows
     public WebDriver getDriver(String url){
-
-        System.setProperty("webdriver.chrome.driver",  "/home/opc/chromedriver");
+        System.setProperty("webdriver.chrome.driver",
+                System.getProperty("os.name", "generic")
+                        .toLowerCase(Locale.ENGLISH).contains("nux")
+                        ?OPC_DRIVER:MAC_DRIVER);
         ChromeOptions opt = new ChromeOptions();
         opt.addArguments("no-sandbox");
         opt.addArguments("disable-dev-shm-usage");

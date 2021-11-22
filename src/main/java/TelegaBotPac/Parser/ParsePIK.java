@@ -1,17 +1,11 @@
 package TelegaBotPac.Parser;
 
-import TelegaBotPac.Connection;
 import TelegaBotPac.core.model.Destination;
 import TelegaBotPac.core.model.Route;
 import TelegaBotPac.service.DriverServiceChrome;
-import org.jsoup.nodes.Document;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.service.DriverService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,14 +43,9 @@ public class ParsePIK implements ClubParseble {
             System.out.println(destinations.size());
 
             for (Destination destination : destinations) {
+                System.out.println(destination.toString());
                 driver.get(destination.getLink());
-                System.out.println(destination);
-                try {
-                    resMap.put(destination, DoParsingBranch.getParsed(driver));
-                } catch (InterruptedException e) {
-                    System.out.println("INTERRUPTED!!!!");
-                    e.printStackTrace();
-                }
+                resMap.put(destination, DoParsingBranch.getParsed(driver));
             }
         }finally {
             driver.close();

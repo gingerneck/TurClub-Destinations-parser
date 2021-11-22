@@ -65,6 +65,7 @@ public class CacheManager {
         System.out.println("START CACHE INIT");
         ParsePIK parsePIK = new ParsePIK();
         Map<Destination, List<Route>> routes = parsePIK.getInfoRoute();
+        CacheManager.getInstance().clear();
         CacheManager cache = CacheManager.getInstance();
         routes.forEach(((destination, routesList) -> {
             cache.put(destination.getNameDestination(), routesList);
@@ -79,5 +80,4 @@ public class CacheManager {
         }
         return instance;
     }
-
 }

@@ -12,6 +12,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
+
+
 @Component
 @Slf4j
 public class SimpleBot extends TelegramLongPollingBot {
@@ -27,9 +29,6 @@ public class SimpleBot extends TelegramLongPollingBot {
             boolean menu = true;
 
             if ("s8s87vEStKSbaf7".equals(messageout)) {
-                if (CacheManager.isInit()) {
-                    CacheManager.getInstance().clear();
-                }
                 new Thread(CacheManager::init).start();
             }
 

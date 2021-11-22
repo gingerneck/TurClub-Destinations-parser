@@ -1,18 +1,28 @@
 package TelegaBotPac;
 
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-@SpringBootApplication
-@AutoConfigurationPackage
-@EnableScheduling
-public class BotStarter extends SpringBootServletInitializer {
+@Component
+@Slf4j
+public class BotStarter {
 
-    public static void main(String[] args) {
-        new SpringApplicationBuilder(BotStarter.class)
-                .run(args);
+    @Autowired
+    SimpleBot bot;
+
+    @EventListener({ContextRefreshedEvent.class})
+    public void init() throws TelegramApiException {
+            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+        try {
+            botsApi.registerBot(bot);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 }
