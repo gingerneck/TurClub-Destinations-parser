@@ -1,3 +1,0 @@
-package TelegaBotPac.Endpoints;
-
-

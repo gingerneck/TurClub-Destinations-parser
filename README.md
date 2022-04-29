@@ -1,3 +1,9 @@
 # Club Bot Roots
 
-Java app composite on telegram bot api
+It parses site TurClub Pik and retrieve next data 
+
+**{Destination; cost; date}**
+
+## Technologies
+Spring boot, Java 11, Telegram API
+
