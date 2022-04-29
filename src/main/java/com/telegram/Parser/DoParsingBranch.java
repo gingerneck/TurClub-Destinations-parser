@@ -22,15 +22,17 @@ public class DoParsingBranch {
                 webDriver.findElement(new By.ByXPath("//*[@id=\"__layout\"]/div/div[2]/section/div[1]/div/div[1]/button")).click();
                 Thread.sleep(6000);
             }
-        } catch (NoSuchElementException | ElementClickInterceptedException | StaleElementReferenceException | InterruptedException ex) {
-            System.out.println("Errors in push Button");
+        } catch (Throwable ex) {
+            System.out.println("Errors in push Button. " + ex.getMessage());
         }
 
-        List<WebElement> cadrElements = webDriver
+        List<WebElement> cardElements = webDriver
                 .findElements(
                         new By.ByXPath(
                                 "//*[@id=\"__layout\"]/div/div[2]/section/div[1]/div/div[1]/div[2]/div/div"));
-        for (WebElement element : cadrElements) {
+        int count = 0;
+        for (WebElement element : cardElements) {
+            count++;
             try {
                 PriceCurrency priceCurrency = getPriceCurrency(element);
                 routes.add(Route.builder()
@@ -43,8 +45,10 @@ public class DoParsingBranch {
                         .build()
                 );
             } catch (Exception e) {
-                System.out.println("Errors to get info");
-                e.printStackTrace();
+                System.out.println("Errors to get info. " + e.getMessage());
+            }
+            if(count > 11) {
+                break;
             }
         }
         System.out.println("Got ROUTES  - " + routes.size());

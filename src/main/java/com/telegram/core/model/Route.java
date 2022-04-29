@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Formatter;
 
 @Getter
 @Setter
@@ -27,10 +26,10 @@ public class Route implements Serializable {
     private String cost;
     private String currency;
     private String link;
-    private String nameTrip;
     private String title;
     private String aroundCost;
     private String description;
+    private String destination;
 
     public Route() {
     }
@@ -41,7 +40,7 @@ public class Route implements Serializable {
                 "cost='" + cost + '\'' +
                 ", currency='" + currency + '\'' +
                 ", link='" + link + '\'' +
-                ", nameTrip='" + nameTrip + '\'' +
+                ", nameTrip='" + destination + '\'' +
                 ", title='" + title + '\'' +
                 ", aroundCost='" + aroundCost + '\'' +
                 ", Description='" + description + '\'' +

@@ -2,6 +2,7 @@ package com.telegram;
 
 import com.telegram.core.cache.CacheManager;
 import com.telegram.core.model.Route;
+import com.telegram.service.RouteService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,10 +13,15 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
-
 @Component
 @Slf4j
 public class SimpleBot extends TelegramLongPollingBot {
+
+    private final RouteService routeService;
+
+    public SimpleBot(RouteService routeService) {
+        this.routeService = routeService;
+    }
 
     @SneakyThrows
     public void onUpdateReceived(Update update) {
@@ -28,15 +34,10 @@ public class SimpleBot extends TelegramLongPollingBot {
             boolean menu = true;
 
             if ("s8s87vEStKSbaf7".equals(messageout)) {
-                new Thread(CacheManager::init).start();
+                new Thread(routeService::setRoutesToDb).start();
             }
 
-            if (CacheManager.isInit()) {
-                if (CacheManager.getInstance().contains(message.getChatId())) {
-                    System.out.printf("%s %s%n",
-                            message.getChatId(), CacheManager.getInstance().get(message.getChatId()));
-                }
-
+            if (routeService.getRoutes().size()>0) {
                 int i = 1;
                 if (CacheManager.getInstance().contains(messageout)) {
                     StringBuilder strb = new StringBuilder();
@@ -50,7 +51,6 @@ public class SimpleBot extends TelegramLongPollingBot {
                         }
                     }
                     message.setText(strb.toString());
-                    menu = false;
                 } else {
                     StringBuilder strb = new StringBuilder();
 
@@ -60,15 +60,10 @@ public class SimpleBot extends TelegramLongPollingBot {
                         }
                     }
                     message.setText(strb.toString());
-                    menu = false;
                 }
             } else {
                 message.setText("Data initialization");
             }
-
-/*            if (menu) {
-                message.setText(Menu.getMenu());
-            }*/
             try {
                 System.out.printf("ChatId: %s, Message: %s%n", message.getChatId(), messageout);
                 if (!message.getText().isEmpty()) {

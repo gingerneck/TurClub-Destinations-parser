@@ -39,6 +39,7 @@ public class ParsePIK implements ClubParseble {
                 System.out.println(destination.toString());
                 driver.get(destination.getLink());
                 resMap.put(destination, DoParsingBranch.getParsed(driver));
+                break;
             }
         } finally {
             driver.close();
