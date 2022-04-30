@@ -46,7 +46,8 @@ public class SimpleBot extends TelegramLongPollingBot {
             }
 
             int i = 1;
-            if (((List) CacheManager.getInstance().get(CACHE_DESTINATION)).contains(messageout)) {
+            List<String> destinations = (List) CacheManager.getInstance().get(CACHE_DESTINATION);
+            if (destinations != null && destinations.contains(messageout)) {
                 StringBuilder strb = new StringBuilder();
                 for (Route route : routeService.findByDestination(messageout)) {
                     strb.append(route.getDescriptionForMessage(i++));
@@ -57,9 +58,9 @@ public class SimpleBot extends TelegramLongPollingBot {
                     }
                 }
                 message.setText(strb.toString());
-            } else {
+            } else if (destinations != null) {
                 StringBuilder strb = new StringBuilder();
-                for (String title : (List<String>) CacheManager.getInstance().get(CACHE_DESTINATION)) {
+                for (String title : destinations) {
                     strb.append(i++).append(". ").append(title).append("\n");
                 }
                 message.setText(strb.toString());
