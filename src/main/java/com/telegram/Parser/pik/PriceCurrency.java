@@ -1,4 +1,4 @@
-package com.telegram.Parser;
+package com.telegram.Parser.pik;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

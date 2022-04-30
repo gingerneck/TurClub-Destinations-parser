@@ -23,6 +23,7 @@ public class Destination {
 
     private String name;
     private String link;
+    private String club;
 
     public Destination() {
     }
@@ -30,8 +31,10 @@ public class Destination {
     @Override
     public String toString() {
         return "Destination{" +
-                "name='" + name + '\'' +
-                ", link='" + link +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", link='" + link + '\'' +
+                ", club='" + club + '\'' +
                 '}';
     }
 }

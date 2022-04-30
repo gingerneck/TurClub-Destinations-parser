@@ -1,19 +1,18 @@
-package com.telegram.Parser;
+package com.telegram.Parser.pik;
 
+import com.telegram.Parser.ModelParsable;
+import com.telegram.core.cache.CacheManager;
 import com.telegram.core.model.Route;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoParsingBranch {
+public class RoutesParser implements ModelParsable {
 
-    public static List<Route> getParsed(ChromeDriver webDriver) {
+    public List<Route> parse(WebDriver webDriver) {
 
         List<Route> routes = new ArrayList<>();
         try {
@@ -42,12 +41,14 @@ public class DoParsingBranch {
                         .title(element.findElement(new By.ByCssSelector("p[class=trip-card-title]")).getText())
                         .description(element.findElement(new By.ByCssSelector("p[class=trip-card-description]")).getText())
                         .aroundCost(element.findElement(new By.ByCssSelector("div[class=trip-card-price]")).getText())
+                        .club(PikParser.NAME)
+                        .destination((String) CacheManager.getInstance().get(PikParser.NAME + "destination"))
                         .build()
                 );
             } catch (Exception e) {
                 System.out.println("Errors to get info. " + e.getMessage());
             }
-            if(count > 11) {
+            if (count > 11) {
                 break;
             }
         }
@@ -64,11 +65,12 @@ public class DoParsingBranch {
         } catch (Throwable e) {
             System.out.println("can not read span[itemprop=priceCurrency]");
             try {
-                String[] priceCurrency = obj.findElement(By.cssSelector("div.trip-card-price > span")).getText().split(" ");
-                if (priceCurrency.length == 2) {
-                    price = priceCurrency[0];
-                    currency = priceCurrency[1];
+                String priceText = obj.findElement(By.cssSelector("div.trip-card-price > span")).getText();
+                String[] priceCurrency = priceText.split(" ");
+                if (priceCurrency.length >= 2) {
+                    currency = priceCurrency[priceCurrency.length-1];
                 }
+                price = priceText.replaceAll("\\D", "");
             } catch (Throwable t) {
                 System.out.println("can not read div.trip-card-price");
             }

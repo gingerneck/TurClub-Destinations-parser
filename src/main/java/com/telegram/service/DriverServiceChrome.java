@@ -21,14 +21,9 @@ public class DriverServiceChrome {
         opt.addArguments("no-sandbox");
         opt.addArguments("disable-dev-shm-usage");
         opt.addArguments("headless");
-
         ChromeDriver driver = new ChromeDriver(opt);
-
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
         driver.get(url);
-
         return driver;
-
     }
 }

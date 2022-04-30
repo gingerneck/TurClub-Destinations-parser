@@ -1,10 +1,5 @@
 package com.telegram.core.cache;
 
-import com.telegram.Parser.ParsePIK;
-import com.telegram.core.model.Destination;
-import com.telegram.core.model.Route;
-import lombok.SneakyThrows;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,36 +15,41 @@ public class CacheManager {
     }
 
     public void put(String cacheKey, Object value) {
-        cache.put(cacheKey, value);
+        getInstance().cache.put(cacheKey, value);
+    }
+
+    public void putAll(Map<String, ? extends Object> data) {
+        getInstance().cache.putAll(data);
     }
 
     public Object get(String cacheKey) {
-        return cache.get(cacheKey);
+
+        return getInstance().cache.get(cacheKey);
     }
 
     public String getFirstKey() {
-        return cache.keySet().stream().findFirst().get();
+        return getInstance().cache.keySet().stream().findFirst().get();
     }
 
     public Object getFirstValue() {
-        return cache.values().stream().findFirst().get();
+        return getInstance().cache.values().stream().findFirst().get();
     }
 
     public boolean contains(String cacheKey) {
-        return cache.containsKey(cacheKey);
+        return getInstance().cache.containsKey(cacheKey);
     }
 
     public void clear(String cacheKey) {
-        cache.put(cacheKey, null);
+        getInstance().cache.put(cacheKey, null);
     }
 
     public void clear() {
-        cache.clear();
+        getInstance().cache.clear();
     }
 
     public static List<String> getKeys() {
         List<String> keys = new ArrayList<>();
-        instance.cache.forEach((key, value) ->
+        getInstance().cache.forEach((key, value) ->
                 keys.add(key));
         return keys;
     }
@@ -58,26 +58,12 @@ public class CacheManager {
         return instance != null && instance.cache.size() > 0;
     }
 
-    @SneakyThrows
-    public static void init() {
+    public static CacheManager init() {
         System.out.println("START CACHE INIT");
-        ParsePIK parsePIK = new ParsePIK();
-        Map<Destination, List<Route>> routes = parsePIK.getInfoRoute();
-        //todo validation
-        //      if (parsePIK.isValidParsedData(routes)) {
         CacheManager cache = CacheManager.getInstance();
         cache.clear();
-
-        routes.forEach(((destination, routesList) -> {
-            cache.put(destination.getNameDestination(), routesList);
-        }));
-        System.out.println(routes.size());
-        System.out.println(String.join(",", cache.cache.keySet()));
         System.out.println("Cache initialized.");
-        //    } else {
-        //        System.out.println("Cache not initialized. Cause routes not valid!");
-        //    }
-
+        return cache;
     }
 
     public synchronized static CacheManager getInstance() {

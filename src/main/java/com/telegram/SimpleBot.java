@@ -2,6 +2,8 @@ package com.telegram;
 
 import com.telegram.core.cache.CacheManager;
 import com.telegram.core.model.Route;
+import com.telegram.service.BotService;
+import com.telegram.service.DestinationService;
 import com.telegram.service.RouteService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -13,14 +15,20 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
+import static com.telegram.Constants.CACHE_DESTINATION;
+
 @Component
 @Slf4j
 public class SimpleBot extends TelegramLongPollingBot {
 
+    private final BotService botService;
     private final RouteService routeService;
+    private final DestinationService destinationService;
 
-    public SimpleBot(RouteService routeService) {
+    public SimpleBot(BotService botService, RouteService routeService, DestinationService destinationService) {
+        this.botService = botService;
         this.routeService = routeService;
+        this.destinationService = destinationService;
     }
 
     @SneakyThrows
@@ -34,35 +42,27 @@ public class SimpleBot extends TelegramLongPollingBot {
             boolean menu = true;
 
             if ("s8s87vEStKSbaf7".equals(messageout)) {
-                new Thread(routeService::setRoutesToDb).start();
+                new Thread(botService::parseAllClub).start();
             }
 
-            if (routeService.getRoutes().size()>0) {
-                int i = 1;
-                if (CacheManager.getInstance().contains(messageout)) {
-                    StringBuilder strb = new StringBuilder();
-                    List<Route> routes = (List<Route>) CacheManager.getInstance().get(messageout);
-                    for (Route route : routes) {
-                        strb.append(route.getDescriptionForMessage(i++));
-                        if (strb.length() > 3500) {
-                            message.setText(strb.toString());
-                            execute(message);
-                            strb = new StringBuilder();
-                        }
+            int i = 1;
+            if (((List) CacheManager.getInstance().get(CACHE_DESTINATION)).contains(messageout)) {
+                StringBuilder strb = new StringBuilder();
+                for (Route route : routeService.findByDestination(messageout)) {
+                    strb.append(route.getDescriptionForMessage(i++));
+                    if (strb.length() > 3500) {
+                        message.setText(strb.toString());
+                        execute(message);
+                        strb = new StringBuilder();
                     }
-                    message.setText(strb.toString());
-                } else {
-                    StringBuilder strb = new StringBuilder();
-
-                    for (String title : CacheManager.getKeys()) {
-                        if (!((List) CacheManager.getInstance().get(title)).isEmpty()) {
-                            strb.append(i++).append(". ").append(title).append("\n");
-                        }
-                    }
-                    message.setText(strb.toString());
                 }
+                message.setText(strb.toString());
             } else {
-                message.setText("Data initialization");
+                StringBuilder strb = new StringBuilder();
+                for (String title : (List<String>) CacheManager.getInstance().get(CACHE_DESTINATION)) {
+                    strb.append(i++).append(". ").append(title).append("\n");
+                }
+                message.setText(strb.toString());
             }
             try {
                 System.out.printf("ChatId: %s, Message: %s%n", message.getChatId(), messageout);

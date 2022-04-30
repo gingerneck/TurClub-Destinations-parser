@@ -30,6 +30,7 @@ public class Route implements Serializable {
     private String aroundCost;
     private String description;
     private String destination;
+    private String club;
 
     public Route() {
     }

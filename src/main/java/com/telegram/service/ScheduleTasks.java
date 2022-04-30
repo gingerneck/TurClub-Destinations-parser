@@ -6,14 +6,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduleTasks {
 
-    private final RouteService routeService;
+    private final BotService botService;
 
-    public ScheduleTasks(RouteService routeService) {
-        this.routeService = routeService;
+    public ScheduleTasks(BotService botService) {
+        this.botService = botService;
     }
 
     @Scheduled(cron="0 0 2 * * 1,3,6")
     public void initData(){
-        routeService.setRoutesToDb();
+        botService.parseAllClub();
     }
 }
