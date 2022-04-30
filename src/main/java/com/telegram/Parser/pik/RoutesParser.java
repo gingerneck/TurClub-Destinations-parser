@@ -29,9 +29,7 @@ public class RoutesParser implements ModelParsable {
                 .findElements(
                         new By.ByXPath(
                                 "//*[@id=\"__layout\"]/div/div[2]/section/div[1]/div/div[1]/div[2]/div/div"));
-        int count = 0;
         for (WebElement element : cardElements) {
-            count++;
             try {
                 PriceCurrency priceCurrency = getPriceCurrency(element);
                 routes.add(Route.builder()
@@ -47,9 +45,6 @@ public class RoutesParser implements ModelParsable {
                 );
             } catch (Exception e) {
                 System.out.println("Errors to get info. " + e.getMessage());
-            }
-            if (count > 11) {
-                break;
             }
         }
         System.out.println("Got ROUTES  - " + routes.size());
