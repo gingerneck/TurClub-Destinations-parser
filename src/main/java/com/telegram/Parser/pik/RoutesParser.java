@@ -40,9 +40,10 @@ public class RoutesParser implements ModelParsable {
                         .aroundCost(element.findElement(new By.ByCssSelector("div[class=trip-card-price]")).getText())
                         .build()
                 );
-                if(routes.size()>4){
+                // for tests
+           /*     if(routes.size()>4){
                     break;
-                }
+                }*/
             } catch (Exception e) {
                 System.out.println("Errors to get info. " + e.getMessage());
             }

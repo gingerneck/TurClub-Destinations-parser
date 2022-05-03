@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,6 +20,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 @Entity
+@ToString
 public class Route implements Serializable {
 
     private static final long serialVersionUID = 1L;

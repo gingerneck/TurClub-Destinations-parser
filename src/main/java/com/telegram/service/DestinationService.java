@@ -22,14 +22,17 @@ public class DestinationService {
         this.destinationRepository = destinationRepository;
     }
 
+    @Transactional
     public void save(Destination destination){
         destinationRepository.save(destination);
     }
 
+    @Transactional
     public void saveAll(Iterable<Destination> destinations){
         destinationRepository.saveAll(destinations);
     }
 
+    @Transactional
     public void deleteAll(){
         destinationRepository.deleteAll();
     }

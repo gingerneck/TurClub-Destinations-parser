@@ -8,6 +8,7 @@ import com.telegram.core.model.Destination;
 import com.telegram.core.model.Route;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public class BotService {
         this.clubParsables = clubParsables;
     }
 
+    @Transactional
     public void parseAllClub() {
         deleteAll();
         clubParsables.forEach(club -> {
@@ -51,6 +53,7 @@ public class BotService {
         initCache();
     }
 
+    @Transactional
     public void initCache() {
         List<DestinationDTO> destinations = (List<DestinationDTO>) destinationService.findAll();
         CacheManager.init()
@@ -61,6 +64,7 @@ public class BotService {
 
     }
 
+    @Transactional
     public void deleteAll() {
         companyService.deleteAll();
         routeService.deleteAll();

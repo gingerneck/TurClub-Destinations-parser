@@ -8,6 +8,7 @@ import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,11 +28,13 @@ public class RouteService {
     }
 
     @SneakyThrows
+    @Transactional
     public void saveAll(Iterable<Route> routes) {
         routeRepository.saveAll(routes);
     }
 
     @SneakyThrows
+    @Transactional
     public void save(Route route, Destination destination) {
         route.setDestination(destination);
         routeRepository.save(route);
@@ -57,7 +60,7 @@ public class RouteService {
         return routes;
     }
 
-
+    @Transactional
     public void deleteAll() {
         routeRepository.deleteAll();
     }

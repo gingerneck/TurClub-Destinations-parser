@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,11 +23,13 @@ public class CompanyService {
     }
 
     @SneakyThrows
+    @Transactional
     public void saveAll(Iterable<Company> companies) {
         companyRepository.saveAll(companies);
     }
 
     @SneakyThrows
+    @Transactional
     public void save(Company company) {
         companyRepository.save(company);
     }
@@ -43,6 +46,7 @@ public class CompanyService {
     }
 
 
+    @Transactional
     public void deleteAll(){
         companyRepository.deleteAll();
     }
