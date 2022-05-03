@@ -43,6 +43,7 @@ public class PikParser implements ClubParsable {
                 driver.get(destination.getLink());
                 CacheManager.getInstance().put(getName() + "destination", destination.getName());
                 resMap.put(destination, routesParser.parse(driver));
+                break;
             }
         } finally {
             driver.close();

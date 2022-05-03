@@ -11,12 +11,12 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Component
 @Slf4j
-public class BotStarter {
+public class TelegramBotStarter {
 
-    private final SimpleBot bot;
+    private final TurClubRouter bot;
     private final BotService botService;
 
-    public BotStarter(SimpleBot bot, BotService botService) {
+    public TelegramBotStarter(TurClubRouter bot, BotService botService) {
         this.bot = bot;
         this.botService = botService;
     }
@@ -29,5 +29,6 @@ public class BotStarter {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+       // botService.parseAllClub();
     }
 }

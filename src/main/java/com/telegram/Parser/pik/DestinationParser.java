@@ -27,7 +27,6 @@ public class DestinationParser implements ModelParsable {
                                                 .name(el.getAttribute("innerHTML").trim()
                                                         .replaceAll("^[\n\r]", "").replaceAll("[\n\r]$", ""))
                                                 .link(el.getAttribute("href"))
-                                                .club(PikParser.NAME)
                                                 .build());
                                 System.out.println(el.getAttribute("innerHTML").strip());
                             }

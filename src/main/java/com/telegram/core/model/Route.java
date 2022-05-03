@@ -6,9 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Getter
@@ -29,23 +32,16 @@ public class Route implements Serializable {
     private String title;
     private String aroundCost;
     private String description;
-    private String destination;
-    private String club;
 
-    public Route() {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "destination_id")
+    private Destination destination;
+
+    public void setDestination(Destination destination){
+        this.destination = destination;
     }
 
-    @Override
-    public String toString() {
-        return "Route{" +
-                "cost='" + cost + '\'' +
-                ", currency='" + currency + '\'' +
-                ", link='" + link + '\'' +
-                ", nameTrip='" + destination + '\'' +
-                ", title='" + title + '\'' +
-                ", aroundCost='" + aroundCost + '\'' +
-                ", Description='" + description + '\'' +
-                '}';
+    public Route() {
     }
 
     public String getDescriptionForMessage(int i){

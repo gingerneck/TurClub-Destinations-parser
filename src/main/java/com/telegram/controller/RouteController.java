@@ -1,5 +1,6 @@
 package com.telegram.controller;
 
+import com.telegram.core.dto.RouteDTO;
 import com.telegram.core.model.Route;
 import com.telegram.service.RouteService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +21,8 @@ public class RouteController {
     }
 
     @GetMapping("/routes")
-    public List<Route> getRoutes(){
-        return (List<Route>) routeService.findAll();
+    public List<RouteDTO> getRoutes(){
+        return (List<RouteDTO>) routeService.findAll();
     }
 
     @GetMapping("/routes-with-destination")

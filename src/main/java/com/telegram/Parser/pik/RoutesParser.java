@@ -1,7 +1,6 @@
 package com.telegram.Parser.pik;
 
 import com.telegram.Parser.ModelParsable;
-import com.telegram.core.cache.CacheManager;
 import com.telegram.core.model.Route;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -39,10 +38,11 @@ public class RoutesParser implements ModelParsable {
                         .title(element.findElement(new By.ByCssSelector("p[class=trip-card-title]")).getText())
                         .description(element.findElement(new By.ByCssSelector("p[class=trip-card-description]")).getText())
                         .aroundCost(element.findElement(new By.ByCssSelector("div[class=trip-card-price]")).getText())
-                        .club(PikParser.NAME)
-                        .destination((String) CacheManager.getInstance().get(PikParser.NAME + "destination"))
                         .build()
                 );
+                if(routes.size()>4){
+                    break;
+                }
             } catch (Exception e) {
                 System.out.println("Errors to get info. " + e.getMessage());
             }

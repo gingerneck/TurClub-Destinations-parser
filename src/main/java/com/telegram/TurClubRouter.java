@@ -19,13 +19,13 @@ import static com.telegram.Constants.CACHE_DESTINATION;
 
 @Component
 @Slf4j
-public class SimpleBot extends TelegramLongPollingBot {
+public class TurClubRouter extends TelegramLongPollingBot {
 
     private final BotService botService;
     private final RouteService routeService;
     private final DestinationService destinationService;
 
-    public SimpleBot(BotService botService, RouteService routeService, DestinationService destinationService) {
+    public TurClubRouter(BotService botService, RouteService routeService, DestinationService destinationService) {
         this.botService = botService;
         this.routeService = routeService;
         this.destinationService = destinationService;
@@ -46,6 +46,9 @@ public class SimpleBot extends TelegramLongPollingBot {
             }
 
             int i = 1;
+            if (!CacheManager.isInit()) {
+                botService.initCache();
+            }
             List<String> destinations = (List) CacheManager.getInstance().get(CACHE_DESTINATION);
             if (destinations != null && destinations.contains(messageout)) {
                 StringBuilder strb = new StringBuilder();
@@ -64,7 +67,10 @@ public class SimpleBot extends TelegramLongPollingBot {
                     strb.append(i++).append(". ").append(title).append("\n");
                 }
                 message.setText(strb.toString());
+            } else {
+                message.setText("Try again");
             }
+
             try {
                 System.out.printf("ChatId: %s, Message: %s%n", message.getChatId(), messageout);
                 if (!message.getText().isEmpty()) {

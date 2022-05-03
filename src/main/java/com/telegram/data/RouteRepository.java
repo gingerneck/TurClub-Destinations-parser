@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface RouteRepository extends CrudRepository<Route, Long> {
 
-    Iterable<Route> findByDestination(String destination);
+    Iterable<Route> findByDestinationId(Long id);
 }

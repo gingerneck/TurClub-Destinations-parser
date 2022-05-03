@@ -7,37 +7,33 @@ import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.List;
 
-@Getter
 @Setter
-@AllArgsConstructor
-@Builder
+@Getter
 @Entity
-public class Destination {
+@Builder
+@AllArgsConstructor
+public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
-    private String link;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_id")
-    private Company company;
+    private String address;
+    private String phone;
+    private String owner;
 
     @OneToMany(cascade = CascadeType.ALL,
-            mappedBy = "destination", orphanRemoval = true)
-    private List<Route> routes;
+    mappedBy = "company", orphanRemoval = true)
+    private List<Destination> destinations;
 
-    public Destination() {
+    public Company() {
+
     }
 }
