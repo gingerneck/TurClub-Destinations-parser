@@ -1,2 +1,2 @@
-  CLUB bot for searching roots
+-=Club tur application=-
 :: Built with Spring Boot :: ${spring-boot.version}

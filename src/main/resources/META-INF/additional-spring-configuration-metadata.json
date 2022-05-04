@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "turclub.bot.resetdata",
+      "type": "java.lang.String",
+      "description": "Description for turclub.bot.resetdata."
+    },
+    {
+      "name": "turclub.bot.token",
+      "type": "java.lang.String",
+      "description": "Description for turclub.bot.token."
+    }
+  ] }
