@@ -7,3 +7,5 @@ routes.db
 routes.db-journal
 system.properties
 *.iml
+chromedriver
+mvnw*
