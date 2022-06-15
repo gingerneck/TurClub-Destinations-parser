@@ -1,10 +1,10 @@
 package com.clubtur.telegram.bot;
 
-import com.clubtur.core.cache.CacheManager;
-import com.clubtur.core.model.Route;
+import com.clubtur.destination.DestinationService;
+import com.clubtur.route.Route;
+import com.clubtur.route.RouteService;
 import com.clubtur.service.BotService;
-import com.clubtur.service.DestinationService;
-import com.clubtur.service.RouteService;
+import com.clubtur.utils.core.cache.CacheManager;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.clubtur.core.Constants.CACHE_DESTINATION;
+import static com.clubtur.utils.Constants.CACHE_DESTINATION;
 
 @Component
 @Slf4j
@@ -53,10 +53,9 @@ public class TelegramBotClubRoutes extends TelegramLongPollingBot {
             chatId = update.getCallbackQuery().getMessage().getChatId();
         }
         String messageout = messageText;
-        SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
+        SendMessage message = new SendMessage();
         message.enableHtml(true);
         message.setChatId(String.valueOf(chatId));
-        boolean menu = true;
 
         if (!CacheManager.isInitilising() && reset.equals(messageout)) {
             new Thread(botService::parseAllClub).start();
@@ -79,14 +78,7 @@ public class TelegramBotClubRoutes extends TelegramLongPollingBot {
             }
             message.setText(strb.toString());
         } else if (destinations != null) {
-
             message = sendInlineKeyBoardMessage(chatId, destinations);
-
-               /* StringBuilder strb = new StringBuilder();
-                for (String title : destinations) {
-                    strb.append(i++).append(". ").append(title).append("\n");
-                }
-                message.setText(strb.toString());*/
         } else {
             message.setText("Try again");
         }
@@ -115,14 +107,14 @@ public class TelegramBotClubRoutes extends TelegramLongPollingBot {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
-        for (var dist:destinations) {
+        for (var dist : destinations) {
             InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
             inlineKeyboardButton.setText(dist);
             inlineKeyboardButton.setCallbackData(dist);
             keyboardButtonsRow.add(inlineKeyboardButton);
-            if(keyboardButtonsRow.size()==2
+            if (keyboardButtonsRow.size() == 2
                     || destinations.size() % 2 != 0
-                    && rowList.size()*2 == destinations.size() - 1 ){
+                    && rowList.size() * 2 == destinations.size() - 1) {
                 rowList.add(keyboardButtonsRow);
                 keyboardButtonsRow = new ArrayList<>();
             }

@@ -1,3 +1,0 @@
-package com.clubtur.Endpoints;
-
-

@@ -1,18 +1,21 @@
 package com.clubtur.service;
 
-import com.clubtur.Parser.ClubParsable;
-import com.clubtur.core.cache.CacheManager;
-import com.clubtur.core.dto.DestinationDTO;
-import com.clubtur.core.model.Company;
-import com.clubtur.core.model.Destination;
-import com.clubtur.core.model.Route;
+import com.clubtur.parser.ClubParsable;
+import com.clubtur.company.CompanyService;
+import com.clubtur.utils.core.cache.CacheManager;
+import com.clubtur.destination.DestinationDTO;
+import com.clubtur.company.Company;
+import com.clubtur.destination.Destination;
+import com.clubtur.route.Route;
+import com.clubtur.destination.DestinationService;
+import com.clubtur.route.RouteService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.clubtur.core.Constants.CACHE_DESTINATION;
+import static com.clubtur.utils.Constants.CACHE_DESTINATION;
 
 @Component
 public class BotService {
