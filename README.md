@@ -1,4 +1,4 @@
-# Club Bot Roots
+# TurClub destinations parser
 
 It parses site TurClub Pik and retrieve next data 
 
